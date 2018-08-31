@@ -63,6 +63,7 @@ class FileSystemStorage {
   constructor(file) {
     let path = require('path');
     this._file = file || path.join(process.env.HOME, '.ghost-client.json');
+    let fs = require('fs');
   }
 
   _writeFileAsync(...args) {
@@ -112,7 +113,7 @@ class FileSystemStorage {
   }
 
   async getAsync(key) {
-    let store = await this._getStoreAsync;
+    let store = await this._getStoreAsync();
     return store[key];
   }
 

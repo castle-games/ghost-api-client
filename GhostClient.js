@@ -11,36 +11,49 @@ class GhostClient extends ThinClient {
     url = url || PRODUCTION_API_URL;
     super(url, context, opts);
     this._storage = this._opts.storage || storage();
+    this._setContextAsync();
+  }
+
+  async _setContextAsync() {
+    let sessionSecret = await this._storage.getAsync('sessionSecret');
+    this._context = this._context || {};
+    Object.assign(this._context, {
+      sessionSecret,
+    });
   }
 
   clientSimpleMethods() {
-    return ['add'];
+    return ['add', 'profile'];
   }
 
   clientDidReceiveCommands(commands) {}
 
   clientDidReceiveData(data) {}
 
-  async signInAsync(username, password) {
+  async loginAsync(username, password) {
     try {
-      let result = await this.callAsync('signIn', username, password);
+      let result = await this.callAsync('login', username, password);
       if (result && result.sessionSecret) {
         await this._storage.setAsync('sessionSecret', result.sessionSecret);
+        await this._setContextAsync();
+        return result;
       } else {
-        throw ApiError('Problem Signing In', 'SIGN_IN_PROBLEM');
+        throw ApiError('Problem performing login', 'LOGIN_PROBLEM');
       }
     } catch (e) {
       throw e;
     }
   }
 
-  async signOutAsync(sessionSecret) {
+  async logoutAsync(sessionSecret) {
     sessionSecret = sessionSecret || (await this._storage.getAsync('sessionSecret'));
-    let result = await this.callAsync('signOut', sessionSecret);
+    let result = await this.callAsync('logout', sessionSecret);
     await this._storage.deleteAsync('sessionSecret');
+    await this._setContextAsync();
     return result;
   }
-  
+
+
 }
 
 module.exports = GhostClient;
