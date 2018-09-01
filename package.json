@@ -1,6 +1,6 @@
 {
   "name": "ghost-api-client",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Ghost server API client",
   "main": "GhostClient.js",
   "repository": "https://github.com/expo/ghost-api-client-js.git",
@@ -11,5 +11,16 @@
   },
   "dependencies": {
     "thin-client": "^0.1.0"
+  },
+  "repl": {
+    "ignore": {
+      "files": [
+        "Storage.ios.js",
+        "Storage.android.js",
+        "Storage.web.js",
+        "ReactNativeAsyncStorage.js",
+        "BrowserStorage.js"
+      ]
+    }
   }
 }

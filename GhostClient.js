@@ -2,7 +2,7 @@ let ThinClient = require('thin-client');
 
 let ApiError = require('./ApiError');
 let pkg = require('./package');
-let storage = require('./storage');
+let Storage = require('./Storage');
 
 let PRODUCTION_API_URL = 'http://localhost:1380/api';
 
@@ -10,7 +10,7 @@ class GhostClient extends ThinClient {
   constructor(url, context, opts) {
     url = url || PRODUCTION_API_URL;
     super(url, context, opts);
-    this._storage = this._opts.storage || storage();
+    this._storage = this._opts.storage || new Storage();
     this._setContextAsync();
   }
 
@@ -52,14 +52,12 @@ class GhostClient extends ThinClient {
     await this._setContextAsync();
     return result;
   }
-
-
 }
 
 module.exports = GhostClient;
 
 Object.assign(module.exports, {
-  storage,
+  Storage,
   PRODUCTION_API_URL,
   ThinClient,
 });
