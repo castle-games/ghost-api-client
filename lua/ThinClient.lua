@@ -46,30 +46,21 @@ function ThinClient:call(method, ...)
 
   local headers = {
     ["Content-Type"] = "application/json",
-    ["Content-Length"] = #body
+    ["content-length"] = #body
   }
-  print("contentLength=", #body)
 
   local responseBody = {}
   local source = ltn12.source.string(body)
-  print("source=", source)
   local sink = ltn12.sink.table(responseBody)
 
   local result, responseCode, responseHeaders, responseStatus =
     http.request {
     url = self._url,
     method = "POST",
+    headers = headers,
     source = source,
     sink = sink
   }
-
-  print(result)
-  print(responseCode)
-  print(responseStatus)
-
-  if true then
-    return body
-  end
 
   -- TODO: Check error codes, etc.
 
@@ -82,9 +73,42 @@ function ThinClient:call(method, ...)
     end
   )
   if ok then
-    return "json=" .. responseText
+    if response.error then
+      if self._opts.logErrors then
+        print("API Server Error: " .. response.error.code .. " / " .. response.error.message)
+      end
+      if self._opts.errorOnServerError then
+        error {
+          isError = true,
+          error = response.error,
+          type = "SERVER_ERROR",
+          code = "API_SERVER_ERROR",
+          response = response,
+          message = response.error.message
+        }
+      end
+    end
+    if response.clientError then
+      if self._opts.errorOnClientError then
+        error {
+          isError = true,
+          type = "CLIENT_ERROR",
+          code = response.clientError.code,
+          response = response,
+          message = response.clientError.message
+        }
+      end
+    end
+    return response
   else
-    return "Error parsing json. json=" .. responseText
+    error {
+      isError = true,
+      type = "SERVER_ERROR",
+      code = "JSON_PARSE_ERROR",
+      responseText = responseText,
+      message = "JSON parse error"
+    }
+    error(err)
   end
 end
 
