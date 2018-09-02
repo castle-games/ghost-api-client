@@ -4,7 +4,7 @@ let ApiError = require('./ApiError');
 let pkg = require('./package');
 let Storage = require('./Storage');
 
-let PRODUCTION_API_URL = 'http://localhost:1380/api';
+let PRODUCTION_API_URL = 'https://ghost-server.app.render.com/api';
 
 class GhostClient extends ThinClient {
   constructor(url, context, opts) {

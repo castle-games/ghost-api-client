@@ -1,10 +1,11 @@
 local __VERSION__ = "0.0.0"
 
-local http = require("socket.http")
+-- local http = require("socket.http")
 local cjson = require("cjson")
 local ltn12 = require("ltn12")
 
 local assign = require("./assign")
+local inspect = require("./inspect")
 local Object = require("./classic")
 
 local ThinClient = Object:extend()
@@ -33,7 +34,7 @@ function ThinClient:clientDidReceiveCommands(commands)
 end
 
 function ThinClient:call(method, ...)
-  local args = {...}
+  args = {...}
 
   local body =
     cjson.encode(
@@ -54,7 +55,7 @@ function ThinClient:call(method, ...)
   local sink = ltn12.sink.table(responseBody)
 
   local result, responseCode, responseHeaders, responseStatus =
-    http.request {
+    network.request {
     url = self._url,
     method = "POST",
     headers = headers,
