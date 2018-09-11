@@ -24,6 +24,10 @@ cross-fetch@^2.2.2:
     node-fetch "2.1.2"
     whatwg-fetch "2.0.4"
 
+freeport-async@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/freeport-async/-/freeport-async-1.1.1.tgz#5c8cf4fc1aba812578317bd4d7a1e5597baf958e"
+
 minimatch@3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
@@ -32,10 +36,11 @@ minimatch@3.0.4:
 
 node-fetch@2.1.2:
   version "2.1.2"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
+  resolved "http://registry.npmjs.org/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
 
-project-repl@../project-repl:
+project-repl@^1.4.3:
   version "1.4.3"
+  resolved "https://registry.yarnpkg.com/project-repl/-/project-repl-1.4.3.tgz#f2e04dc599aa3a0b21e4935219038c039624cb86"
   dependencies:
     recursive-readdir "^2.2.2"
 
@@ -45,9 +50,9 @@ recursive-readdir@^2.2.2:
   dependencies:
     minimatch "3.0.4"
 
-thin-client@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/thin-client/-/thin-client-0.1.0.tgz#e96a4eb69d3dbef2a58804c1746cd8d44e113d74"
+thin-client@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/thin-client/-/thin-client-0.5.0.tgz#3a104ebc7de33a8eab970a46ca27822500591c26"
   dependencies:
     cross-fetch "^2.2.2"
 

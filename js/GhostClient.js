@@ -10,14 +10,14 @@ class GhostClient extends ThinClient {
   constructor(url, context, opts) {
     url = url || PRODUCTION_API_URL;
     super(url, context, opts);
-    this._storage = this._opts.storage || new Storage();
+    this._storage = this.opts.storage || new Storage();
     this._setContextAsync();
   }
 
   async _setContextAsync() {
     let sessionSecret = await this._storage.getAsync('sessionSecret');
-    this._context = this._context || {};
-    Object.assign(this._context, {
+    this.context = this.context || {};
+    Object.assign(this.context, {
       sessionSecret,
     });
   }
@@ -26,7 +26,7 @@ class GhostClient extends ThinClient {
     return ['add', 'profile'];
   }
 
-  clientDidReceiveCommands(commands) {}
+  clientDidReceiveCommand(command) {}
 
   clientDidReceiveData(data) {}
 
@@ -43,6 +43,43 @@ class GhostClient extends ThinClient {
     } catch (e) {
       throw e;
     }
+  }
+
+  async signupAsync(userData) {
+    // You should give username, email, password
+
+    // let userData = {
+    //   connection: 'Username-Password-Authentication',
+    //   email: 'ccheever+test3@gmail.com',
+    //   username: 'ccheevertest3',
+    //   password: 'password',
+    //   given_name: '',
+    //   family_name: '',
+    //   user_metadata: {
+    //     onboarded: true,
+    //     legacy: false,
+    //     bio: 'Building applications with @expo',
+    //     username_github: '',
+    //     username_twitter: '',
+    //     link_personal: '',
+    //     industry: '',
+    //     location: '',
+    //   },
+    // };
+    let userMetadata = {
+      ...userData.user_metadata,
+      onboarded: true,
+      legacy: false,
+      ghostSignup: true,
+    };
+    let outputUserData = {
+      ...userData,
+      connection: 'Username-Password-Authentication',
+      user_metadata: userMetadata,
+    };
+    let result = await this.callAsync('signup', outputUserData);
+    await this.loginAsync(outputUserData.username, outputUserData.password);
+    return result;
   }
 
   async logoutAsync(sessionSecret) {
