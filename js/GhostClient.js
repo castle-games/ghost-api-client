@@ -23,7 +23,7 @@ class GhostClient extends ThinClient {
   }
 
   clientSimpleMethods() {
-    return ['add', 'profile'];
+    return ['add', 'getViewer'];
   }
 
   clientDidReceiveCommand(command) {}
