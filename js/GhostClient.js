@@ -82,8 +82,10 @@ class GhostClient extends ThinClient {
     return result;
   }
 
-  async logoutAsync(sessionSecret) {
-    sessionSecret = sessionSecret || (await this._storage.getAsync('sessionSecret'));
+  async logoutAsync() {
+    // sessionSecret = sessionSecret || (await this._storage.getAsync('sessionSecret'));
+    let sessionSecret = await this._storage.getAsync('sessionSecret');
+
     let result = await this.callAsync('logout', sessionSecret);
     await this._storage.deleteAsync('sessionSecret');
     await this._setContextAsync();
